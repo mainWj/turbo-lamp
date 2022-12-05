@@ -64,3 +64,37 @@ func islandPerimeter(grid [][]int) int {
 	}
 	return result
 }
+
+// 最大面积的岛屿，  dfs，加一个变量用来保存遍历的岛屿大小，并比较
+func maxAreaOfIsland(grid [][]int) int {
+	line, col := len(grid), len(grid[0])
+	if line == 0 && col == 0 {
+		return 0
+	}
+	var dfs func(int, int, [][]int)
+	result, tmpcount := 0, 0
+	dfs = func(x int, y int, grid [][]int){
+		if x < 0 || x >= line || y < 0 || y >= col || grid[x][y] != 1{
+			return
+		}
+		tmpcount ++
+		grid[x][y] = 0
+		dfs(x - 1, y, grid)
+		dfs(x + 1, y, grid)
+		dfs(x, y - 1, grid)
+		dfs(x, y + 1, grid)
+	}
+	for i := 0; i < line; i++{
+		for j := 0; j < col; j++{
+			if grid[i][j] == 1{
+				tmpcount = 0
+				dfs(i, j, grid)
+				if tmpcount > result{
+					result = tmpcount
+				}
+			}
+		}
+	}
+	return result
+
+}
