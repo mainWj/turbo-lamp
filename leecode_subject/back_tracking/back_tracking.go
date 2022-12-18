@@ -54,3 +54,42 @@ func subsets(nums []int) [][]int {
 	traceBake([]int{}, 0)
 	return res
 }
+
+
+// 131 分割回文串，分割问题，也可以当作组合问题来处理，例如，先拿一个字符类比于切割出也给字符
+func partition(s string) [][]string {
+	var res [][]string
+	var path []string
+	var traceBake func(start int, path []string)
+	traceBake = func(start int, path []string){
+		if start >= len(s){
+			tmp := make([]string, len(path))
+			copy(tmp, path)
+			res = append(res, tmp)
+			return
+		}
+		for i:=start; i < len(s); i++{
+			if isPalindrome(s, start, i){
+				path = append(path, s[start:i+1])
+			} else {
+				continue
+			}
+			traceBake(i + 1, path)
+			path = path[:len(path)-1]
+		}
+	}
+	traceBake(0,path)
+	return res
+}
+func isPalindrome(s string, start int, end int) bool{
+	i:=start
+	j:=end
+	for ; i < j;  {
+		if s[i] != s[j] {
+			return false
+		}
+		i ++
+		j--
+	}
+	return true
+}
